@@ -1,0 +1,31 @@
+node_modules/
+data/
+.env
+*.log
+.DS_Store
+.claude/
+logs/
+server/public/
+server/node_modules/
+client/node_modules/
+
+# 本地数据库文件
+*.sqlite
+*.db
+
+# 临时文件
+*.tmp
+*.bak
+
+# IDE
+.vscode/
+.idea/
+
+# 私人文件夹
+private/
+
+# 测试文件
+test_*.js
+
+# 不需要的配置
+lerna.json
