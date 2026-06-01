@@ -14,7 +14,7 @@
 ### 数据可视化
 - **总资产走势图**：支持月度/季度/年度视图
 - **账户净值历史**：每日/每周/每月粒度的净值折线图
-- **资产分布饼图**：直观展示各账户资产占比
+- **资产分布柱状图**：直观展示各账户资产占比
 - **汇率实时显示**：顶部状态栏显示当前汇率
 
 ### 数据管理
@@ -107,10 +107,44 @@ yarn start   # 启动服务（端口 16888）
 访问 http://localhost:16888
 
 ### Docker 部署
+
+#### 本地运行
 ```bash
 docker compose up --build
 ```
 访问 http://localhost:16888
+
+#### NAS 部署
+
+**方式一：导出镜像导入 NAS（推荐）**
+
+在有 Docker 的电脑上构建并导出：
+```bash
+docker build -t wealth-ui:latest .
+docker save -o wealth-ui.tar wealth-ui:latest
+```
+
+将 `wealth-ui.tar` 上传到 NAS，通过 Docker 管理界面导入镜像并创建容器：
+- 端口映射：`16888 → 16888`
+- 存储卷：NAS 目录（如 `/docker/wealth-ui/data`）→ 容器 `/app/data`
+
+**方式二：NAS 上直接构建**
+```bash
+git clone https://github.com/mrj666/wealth-ui.git
+cd wealth-ui
+docker compose up -d --build
+```
+
+**数据持久化**
+
+SQLite 数据存储在容器的 `/app/data` 目录，通过 volume 映射到宿主机。升级时数据不会丢失：
+```bash
+docker compose down
+git pull
+docker compose up -d --build
+```
+
+**数据备份**：只需备份宿主机上映射的 `data` 文件夹。
 
 ## 使用指南
 
@@ -127,7 +161,7 @@ docker compose up --build
   - 备注（可选）
 
 ### 2. 更新净值
-- 在首页点击账户下方的「更新净值」按钮
+- 在首页账户净值折线图右上角点击「更新净值」按钮
 - 填写净值、日期、随记（可选）
 - 保存后会在「更新记录」中留下历史记录
 
@@ -142,7 +176,7 @@ docker compose up --build
 - 点击「刷新汇率」从 API 自动更新
 
 ### 5. 查看数据
-- **首页**：总资产走势、资产分布、账户净值历史
+- **首页**：总资产走势、资产分布柱状图、账户净值历史
 - **账户管理**：账户列表、标签筛选
 - **更新记录**：所有净值更新历史
 

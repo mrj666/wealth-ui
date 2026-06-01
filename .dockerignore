@@ -1,0 +1,11 @@
+node_modules
+client/node_modules
+server/node_modules
+.git
+.claude
+private
+*.sqlite
+*.db
+data
+.env
+*.log
